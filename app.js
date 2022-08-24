@@ -14,7 +14,7 @@ const rub = document.querySelector("#rub");
 //     });
 // });
 
-const convert = (elem, target, isTrue) => {
+const convert = (elem, target, target2) => {
     elem.addEventListener("input", () => {
         const req = new XMLHttpRequest();
         req.open("GET", "data.json");
@@ -25,12 +25,13 @@ const convert = (elem, target, isTrue) => {
             const response = JSON.parse(req.response);
             if (elem === som) {
                 target.value = (elem.value / response.usd).toFixed(3);
+                target2.value = (elem.value / response.rub).toFixed(3);
             } else if (elem === usd) {
                 target.value = (elem.value * response.usd).toFixed(3);
+                target2.value = (elem.value / response.rub * response.usd).toFixed(3);
             } else if (elem === rub) {
                 target.value = (elem.value * response.rub).toFixed(3);
-            } else {
-                target.value = (elem.value / response.rub).toFixed(3);
+                target2.value = (elem.value / response.usd * response.rub).toFixed(3);
             }
 
             // isTrue
@@ -38,16 +39,14 @@ const convert = (elem, target, isTrue) => {
             //     : (target.value = (elem.value * response.usd).toFixed(2));
             // elem.value === "" ? target.value = "" : null;
             elem.value === "" && (target.value = "");
+            elem.value === "" && (target2.value = "");
         });
     });
 };
 
-convert(som, usd, 15);
-convert(usd, som, "");
-convert(som, rub, "");
-convert(rub, som, "");
-convert(usd, rub, "");
-convert(rub, usd, "");
+convert(som, usd, rub);
+convert(usd, som, rub);
+convert(rub, som, usd);
 
 const forms = document.querySelectorAll("form");
 
